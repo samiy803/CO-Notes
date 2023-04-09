@@ -47,7 +47,7 @@ We can find a certficate for each of these cases.
 \end{definition*}
 
 \begin{definition}[Certificate of Infeasibility (Farkas' Lemma)]\label{infeasibility}
-  Let $A$ be the constraint matrix of an LP in SEF. Then we have the LP is infeasible $\Longleftrightarrow$ there exists a vector $y$ such that $y^T A \geq \mathbb 0^T$ and $y^T b < 0$. This $y$ vector can be found at the end of the Simplex Algorithim: If the ending basis is $B$, then $y^T = c_B^T A^{-1}$. If the dual has a feasible solution, then that solution can also be used as a certificate.
+  Let $A$ be the constraint matrix of an LP in SEF. Then we have the LP is infeasible $\Longleftrightarrow$ there exists a vector $y$ such that $y^T A \geq \mathbb 0^T$ and $y^T b < 0$. This $y$ vector can be found at the end of the Simplex Algorithim: If the ending basis is $B$, then $y^T = c_B^T A_B^{-1}$. If the dual has a feasible solution, then that solution can also be used as a certificate.
 \end{definition}
 
 \begin{definition}[Certificate of Unboundedness]\label{unboundedness}
@@ -70,7 +70,7 @@ For this section, we will assume the LP is in SEF: $\{\max c^T x : Ax = b, x \ge
   In Phase I, we add auxiliary variables and construct an auxiliary LP with the following form:
   \begin{equation*}
     \begin{aligned}
-      \min & (\mathbb 0, -\mathbb 1) \m{x \\ a} \\
+      \min & (\mathbb 0, \mathbb 1) \m{x \\ a} \\
       \text{subject to} & \m{A & I} \m{x \\ a} = b \\
       & \m{x \\ a} \geq 0
     \end{aligned}
@@ -81,7 +81,7 @@ For this section, we will assume the LP is in SEF: $\{\max c^T x : Ax = b, x \ge
 \begin{definition}[Simplex: Phase II]
   In Phase II, we solve the original LP using the auxiliary variables as the starting basis. In each iteration, we enter the index left-most positive value of $c^T$ into the basis, and depart the index of $\min \frac {b_i} {A_{ji}}$ where $j$ is the index of the entering variable. After entering and departing a variable, we convert the LP into canonical form and repeat until we're done. The canonical form can be achieved by:
   \begin{enumerate}
-    \item Finding $y^T = c_B^T A^{-1}$.
+    \item Finding $y^T = c_B^T A_B^{-1}$.
     \item Replacing the objective function, $c^T x + z_1$, with $[c^T - y^T A]x + z_1 + y^T b$.
     \item Multiplying the constraints by $A_B^{-1}$.
   \end{enumerate}
@@ -265,13 +265,13 @@ We can forumlate the problem as an integer program as follows:
 \subsection{The Algorithm}
 \begin{algorithm}
   \floatname{algorithm}{Algorithm}
-  \algrenewcommand\algorithmicrequire{\textbf{Input: $G = (V, E)$ and $c \in \mathbb R^m$}}
-  \algrenewcommand\algorithmicensure{\textbf{Output: an s,t path with minimum cost}}
-  \caption{Shortest Path Algorithm}
+  \algrenewcommand\algorithmicrequire{\textbf{Input: }}
+  \algrenewcommand\algorithmicensure{\textbf{Output: }}
+    \caption{Shortest Path Algorithm}
   \label{alg:path}
   \begin{algorithmic}[1]
-    \Require $input$
-    \Ensure $output$
+    \Require $G = (V, E)$, the costs: $c \in \mathbb R^m$, and the source $s$ and sink $t$.
+    \Ensure an s,t path with minimum cost and the vector of width assignments $y$.
     \State Set $y := \mathbb 0, U := \{s\}, T := \{\}$
     \While{$t \notin U$} 
       \State Calculate slack$(uv)$ for all $uv \in \delta(U)$ 
@@ -279,7 +279,7 @@ We can forumlate the problem as an integer program as follows:
       \State Set $y_U := \text{slack}(uv)$
       \State Set $U := U \cup \{v\}$, and $T := T \cup \{uv\}$ 
     \EndWhile \Comment{At the end of this loop, we have a shortest s,t path in $T$}
-    \State \textbf{output} an s,t path in $T$. 
+    \State \textbf{output} an s,t path in $T$, and the vector of width assignments $y$.
   \end{algorithmic}
 \end{algorithm}
 
@@ -299,7 +299,7 @@ We can forumlate the problem as an integer program as follows:
 \end{theorem}
 
 \begin{theorem}[IP and LP Results]
-  Let (IP) be $\{\max c^Tx : Ax \leq b, x \in \mathbb Z\}$, where $A, b$ are rational. Let the convex hull of feasible solutions be the polyhedron $P =\{x : A' x \leq b'\}$. Then (LP) be $\{\max c^T x : x \in P\}$. Then we have the following results:
+  Let (IP) be $\{\max c^Tx : Ax \leq b, x \in \mathbb Z\}$, where $A, b$ are rational. Let the convex hull of feasible solutions be the polyhedron $P =\{x : A' x \leq b'\}$. Also let (LP) be $\{\max c^T x : x \in P\}$. Then we have the following results:
   \begin{enumerate}
     \item (IP) is infeasible $\iff$ (LP) is infeasible.
     \item (IP) is unbounded $\iff$ (LP) is unbounded.

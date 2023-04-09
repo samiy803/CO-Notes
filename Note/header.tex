@@ -3,7 +3,6 @@
 \usepackage[T1]{fontenc}
 \usepackage{textcomp}
 \usepackage[hyphens]{url}
-\usepackage[style=alphabetic,maxcitenames=1]{biblatex}
 \usepackage[colorlinks=true,linkcolor=cyan,urlcolor=magenta,citecolor=violet]{hyperref}
 \usepackage{graphicx}
 \usepackage{float}
@@ -11,7 +10,7 @@
 \usepackage{emptypage}
 \usepackage{subcaption}
 \usepackage[usenames,dvipsnames]{xcolor}
-\input{~/Developer/LaTeX-Template/Math.tex}
+\input{../Math.tex}
 
 
 \usepackage{amsmath, amsfonts, mathtools, amsthm, amssymb}
@@ -58,12 +57,7 @@
 	force/.style={thick, {Circle[length=2pt]}-stealth, shorten <=-1pt}
 }
 
-% Algorithm Env
-\usepackage[linesnumbered,lined,vlined,ruled,commentsnumbered,resetcount,algochapter]{algorithm2e}
-\SetKwComment{Comment}{// }{}
-\SetArgSty{textsl}
-\def\algocflineautorefname{Algorithm}
-\counterwithin{algocfline}{chapter}
+
 
 % Clear out the item autoref name
 \makeatletter

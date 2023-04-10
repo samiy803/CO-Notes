@@ -60,7 +60,7 @@ We can find a certificate for each of these cases.
 
   More generally, the LP is unbounded if and only if there exists a family of solutions $x(t)$ such that $x(t)$ is feasible for all $t \geq 0$ and $c^Tx(t) \rightarrow \infty$ (or $-\infty$ if min) as $t \rightarrow \infty$.
   
-  $\bar x$ and $d$ can be found at the end of the Simplex Algorithm.
+  $\bar x$ and $d$ can be found during the Simplex Algorithm when the values in the pivot column are all non-positive. $\bar x$ is the solution to the LP before entering the variable and $d$ is the pivot column.
 \end{definition}
 
 \section{The Simplex Algorithm}
@@ -75,7 +75,14 @@ For this section, we will assume the LP is in SEF: $\{\max c^T x : Ax = b, x \ge
       & \m{x \\ a} \geq 0
     \end{aligned}
   \end{equation*}
-  where $I$ is the identity matrix and $a$ are the auxiliary variables. Then we solve the auxiliary problem using the auxiliary variables as the starting basis. We can only proceed to Phase II if the optimal value at the end is zero. Otherwise, the original LP is infeasible.
+  where $I$ is the identity matrix and $a$ are the auxiliary variables. Then we solve the auxiliary problem using the
+  auxiliary variables as the starting basis. We can only proceed to Phase II if the optimal value at the end is zero. Otherwise, the original LP is infeasible.
+  \begin{note}
+    If the original LP contains a constraint $i$ where $b_i < 0$, then we must multiply that whole constraint by $-1$ before constructing the auxiliary LP.
+  \end{note}
+  \begin{tip}
+    During the first iteration of Phase I, we can quickly get the auxiliary LP into canonical form by subtracting all the constraints from the objective function. Can you see why?
+    \end{tip}
 \end{definition}
 
 \begin{definition}[Simplex: Phase II]

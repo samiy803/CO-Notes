@@ -16,3 +16,4 @@ Note/*.fls
 Note/*.gz
 Note/*.gz(busy)
 Note/*.synctex.gz(busy)
+.vscode

@@ -28,10 +28,10 @@ For any LP, we know it must have one of three outcomes:
   \item \textbf{Unbounded}: The LP is feasible but unbounded.
 \end{enumerate}
 
-We can find a certficate for each of these cases.
+We can find a certificate for each of these cases.
 
 \begin{definition*}
-  \textbf{Certficate of Optimality}
+  \textbf{Certificate of Optimality}
 \item \begin{definition}[Certificate of Optimality I (Bound)]\label{optimality:i}
   If the objective function is of the form $\underbrace{c^T}_{<0} \underbrace{x}_{\geq 0} + z$, then we can say $z$ is an upperbound (or lowerbound if LP is min) on the objective function and if we have a solution with value $z$, then it must be optimal.
 \end{definition}
@@ -47,7 +47,7 @@ We can find a certficate for each of these cases.
 \end{definition*}
 
 \begin{definition}[Certificate of Infeasibility (Farkas' Lemma)]\label{infeasibility}
-  Let $A$ be the constraint matrix of an LP in SEF. Then we have the LP is infeasible $\Longleftrightarrow$ there exists a vector $y$ such that $y^T A \geq \mathbb 0^T$ and $y^T b < 0$. This $y$ vector can be found at the end of the Simplex Algorithim: If the ending basis is $B$, then $y^T = c_B^T A_B^{-1}$. If the dual has a feasible solution, then that solution can also be used as a certificate.
+  Let $A$ be the constraint matrix of an LP in SEF. Then we have the LP is infeasible $\Longleftrightarrow$ there exists a vector $y$ such that $y^T A \geq \mathbb 0^T$ and $y^T b < 0$. This $y$ vector can be found at the end of the Simplex Algorithm: If the ending basis is $B$, then $y^T = c_B^T A_B^{-1}$. If the dual has a feasible solution, then that solution can also be used as a certificate.
 \end{definition}
 
 \begin{definition}[Certificate of Unboundedness]\label{unboundedness}
@@ -60,7 +60,7 @@ We can find a certficate for each of these cases.
 
   More generally, the LP is unbounded if and only if there exists a family of solutions $x(t)$ such that $x(t)$ is feasible for all $t \geq 0$ and $c^Tx(t) \rightarrow \infty$ (or $-\infty$ if min) as $t \rightarrow \infty$.
   
-  $\bar x$ and $d$ can be found at the end of the Simplex Algorithim.
+  $\bar x$ and $d$ can be found at the end of the Simplex Algorithm.
 \end{definition}
 
 \section{The Simplex Algorithm}
@@ -126,18 +126,18 @@ For this section, we will assume the LP is in SEF: $\{\max c^T x : Ax = b, x \ge
     \hline
     \textbf{max} & & \textbf{min} \\
     \hline
-    $\leq$ constraint & $\iff$ & $\geq$ variable \\
+    $\leq$ constraint & $\iff$ & $\geq 0$ variable \\
     \hline  
-    $\geq$ constraint & $\iff$ & $\leq$ variable \\ 
+    $\geq$ constraint & $\iff$ & $\leq 0$ variable \\ 
     \hline
     $=$ constraint & $\iff$ & free variable \\
     \hline
     \hline
     free variable & $\iff$ & $=$ constraint \\
     \hline
-    $\geq$ variable & $\iff$ & $\geq$ constraint \\
+    $\geq 0$ variable & $\iff$ & $\geq$ constraint \\
     \hline   
-    $\leq$ variable & $\iff$ & $\leq$ constraint \\
+    $\leq 0$ variable & $\iff$ & $\leq$ constraint \\
     \hline
   \end{tabular}
 \end{minipage} &
@@ -199,7 +199,7 @@ Reminder that the dual of the dual is the primal. For example, if we have (D) is
 \end{corollary}
 
 \section{Proving Optimality with Duality}
-Recall from \hyperref[optimality:ii]{Optimality Certficate by Weak Duality}, that a feasible solution to the dual, $y$ can be used as a certficate of optimality for the primal. We can show this as follows:
+Recall from \hyperref[optimality:ii]{Optimality Certficate by Weak Duality}, that a feasible solution to the dual, $y$ can be used as a certificate of optimality for the primal. We can show this as follows:
 \begin{align*}
   & Ax = b \\
   \implies & \underbrace{y^TA}_{\geq^? c^T}x = y^T b \\
@@ -223,7 +223,7 @@ This theorem did not have a name in the course notes, so I made a name for it. I
 \newpage
 
 \begin{theorem}[Trust Me Bro Theorem]
-  Let $\bar x$ be a feasible solution to $\{\max c^T x : Ax \leq b\}$. Then $\bar x$ is optimal if and only if $c$ is in the cone of tight constraints for $\bar x$. The generealization of this is the \hyperref[kkt]{KKT Theorem}
+  Let $\bar x$ be a feasible solution to $\{\max c^T x : Ax \leq b\}$. Then $\bar x$ is optimal if and only if $c$ is in the cone of tight constraints for $\bar x$. The generalization of this is the \hyperref[kkt]{KKT Theorem}
 \end{theorem}
 \begin{proof}
     Trust me bro. 
@@ -255,7 +255,7 @@ This theorem did not have a name in the course notes, so I made a name for it. I
     \end{corollary}
 
 \end{definition}
-We can forumlate the problem as an integer program as follows:
+We can formulate the problem as an integer program as follows:
 \begin{align*}
   & \min c^T x \\
   \text{s.t. } & \sum (x_e : e \in \delta) \geq 1 \text{ for all s,t cuts } \delta \\
@@ -319,7 +319,7 @@ We can forumlate the problem as an integer program as follows:
 \end{definition}
 
 \subsection{Solving IPs with Relaxations}
-We can use relaxations and cutting planes to solve integer programs. The idea is to relax the integer program by removing the intergrality constraint. Then solving the new linear program. If the optimal solution is an integer, then we stop. Otherwise, we add a cutting plane and solve again. We repeat until we find an integer solution. This is a really bad way of solving IPs, but oh well.
+We can use relaxations and cutting planes to solve integer programs. The idea is to relax the integer program by removing the integrality constraint. Then solving the new linear program. If the optimal solution is an integer, then we stop. Otherwise, we add a cutting plane and solve again. We repeat until we find an integer solution. This is a really bad way of solving IPs, but oh well.
 
 \begin{algorithm}
   \floatname{algorithm}{Algorithm}
@@ -378,7 +378,7 @@ We can use relaxations and cutting planes to solve integer programs. The idea is
 \newpage
 
 \section{KKT Conditions}
-The KKT approach is a generlization of Lagrange Multipliers, which only allow for equality constraints. KKT allows for both equality and inequality constraints.
+The KKT approach is a generalization of Lagrange Multipliers, which only allow for equality constraints. KKT allows for both equality and inequality constraints.
 \begin{note}
   We assume that the objective function and all constraints are differentiable at the optimal point.
 \end{note}
@@ -401,7 +401,7 @@ The KKT approach is a generlization of Lagrange Multipliers, which only allow fo
 %   Note that the Dual Feasibility and Stationarity conditions can be combined into one condition if a Slater Point exists: $-\nabla f(x) \in \text{cone}\left\{ g_i(x), h_j(x) : i \in T, j = 1, \dots, n \right\}$, where T is the index set of tight constraints at $x$.
 
 
-\item \begin{definition}[KKT Conditions for a General NLP II]\label{kkt}
+\item \begin{definition}[KKT Conditions for a General NLP II]\label{kkt2}
 We can rewrite the KKT conditions to make them a bit more palatable. Let $\bar x$ be a solution to the NLP. Also assume that the NLP has a Slater Point. Then the ``only" KKT condition is:
 \begin{center}
   $-\nabla f(x) \in \text{cone}\left\{ \nabla g_i(x), \nabla h_j(x) : i \in T, j = 1, \dots, n \right\}$,
@@ -410,7 +410,7 @@ where T is the index set of tight constraints at $\bar x$.
 \end{definition}
 
 
-\item \begin{definition}[KKT Conditions for an NLP without Equality Constraints]\label{kkt2}
+\item \begin{definition}[KKT Conditions for an NLP without Equality Constraints]\label{kkt3}
   Given an NLP in the form of: \\ $\{\min f(x) : g_i(x) \leq 0, i = 1, \dots, m\}$, 
   The KKT conditions are split into 4 parts:
   \begin{enumerate}
@@ -421,7 +421,7 @@ where T is the index set of tight constraints at $\bar x$.
   \end{enumerate}
 \end{definition}
 
-\item \begin{definition}[KKT Conditions for an NLP without Equality Constraints II]\label{kkt2}
+\item \begin{definition}[KKT Conditions for an NLP without Equality Constraints II]\label{kkt4}
   Let $\bar x$ be a solution to the NLP. Also assume that the NLP has a Slater Point. Then the ``only" KKT condition is:
 \begin{center}
   $-\nabla f(x) \in \text{cone}\left\{ \nabla g_i(x): i \in T \right\}$, 

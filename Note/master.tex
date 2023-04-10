@@ -8,438 +8,548 @@
 \usepackage{adjustbox}
 \usepackage[bb=boondox]{mathalfa}
 \usepackage{centernot}
-\usepackage{algorithm} \usepackage[noend]{algpseudocode}
-\newcommand\m[1]{\begin{pmatrix}#1\end{pmatrix}}
-\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\newcommand{\m}[1]{\begin{pmatrix}
+	#1
+\end{pmatrix}}
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
 
 \begin{document}
+	\maketitle
 
-\maketitle
+	\tableofcontents
 
-\tableofcontents
+	\chapter{Linear Programs}
+	\section{Certificates}
+	For any LP, we know it must have one of three outcomes:
+	\begin{enumerate}
+		\item \textbf{Optimal}: The LP is feasible and the optimal value is attained.
 
+		\item \textbf{Infeasible}: The LP is infeasible.
 
-\chapter{Linear Programs}
-\section{Certificates}
-For any LP, we know it must have one of three outcomes:
-\begin{enumerate}
-  \item \textbf{Optimal}: The LP is feasible and the optimal value is attained.
-  \item \textbf{Infeasible}: The LP is infeasible.
-  \item \textbf{Unbounded}: The LP is feasible but unbounded.
-\end{enumerate}
+		\item \textbf{Unbounded}: The LP is feasible but unbounded.
+	\end{enumerate}
 
-We can find a certificate for each of these cases.
+	We can find a certificate for each of these cases.
 
-\begin{definition*}
-  \textbf{Certificate of Optimality}
-\item \begin{definition}[Certificate of Optimality I (Bound)]\label{optimality:i}
-  If the objective function is of the form $\underbrace{c^T}_{<0} \underbrace{x}_{\geq 0} + z$, then we can say $z$ is an upperbound (or lowerbound if LP is min) on the objective function and if we have a solution with value $z$, then it must be optimal.
-\end{definition}
+	\begin{definition*}
+		\textbf{Certificate of Optimality} \item
+		\begin{definition}[Certificate of Optimality I (Bound)]
+			\label{optimality:i} If the objective function is of the form $\underbrace{c^T}
+			_{<0}\underbrace{x}_{\geq 0}+ z$, then we can say $z$ is an upperbound (or
+			lowerbound if LP is min) on the objective function and if we have a
+			solution with value $z$, then it must be optimal.
+		\end{definition}
 
-\item \begin{definition}[Certificate of Optimality II (Weak Duality)]\label{optimality:ii}
-  Let $x$ and $y$ be solutions to the primal (P) and dual (D) LPs, respectively. Then we have $x$ and $y$ are optimal for (P) and (D) $\Longleftrightarrow c^Tx + z_1 = b^Ty + z_2$, where $c^Tx + z_1$ is the objective function of (P) and $b^Ty + z_2$ is the objective function of (D).
-\end{definition}
+		\item
+		\begin{definition}[Certificate of Optimality II (Weak Duality)]
+			\label{optimality:ii} Let $x$ and $y$ be solutions to the primal (P) and dual
+			(D) LPs, respectively. Then we have $x$ and $y$ are optimal for (P) and (D)
+			$\Longleftrightarrow c^{T}x + z_{1} = b^{T}y + z_{2}$, where
+			$c^{T}x + z_{1}$ is the objective function of (P) and $b^{T}y + z_{2}$ is
+			the objective function of (D).
+		\end{definition}
 
-\item \begin{definition}[Certificate of Optimality III (CS Conditions)]\label{optimality:iii}
-  Let $x$ and $y$ be solutions to the primal (P) and dual (D) LPs, respectively. Then we have $x$ and $y$ are optimal for (P) and (D) $\Longleftrightarrow$ $x$ and $y$ are feasible and satisfy all the CS conditions.
-\end{definition}
+		\item
+		\begin{definition}[Certificate of Optimality III (CS Conditions)]
+			\label{optimality:iii} Let $x$ and $y$ be solutions to the primal (P) and dual
+			(D) LPs, respectively. Then we have $x$ and $y$ are optimal for (P) and (D)
+			$\Longleftrightarrow$ $x$ and $y$ are feasible and satisfy all the CS conditions.
+		\end{definition}
+	\end{definition*}
 
-\end{definition*}
+	\begin{definition}[Certificate of Infeasibility (Farkas' Lemma)]
+		\label{infeasibility} Let $A$ be the constraint matrix of an LP in SEF. Then
+		we have the LP is infeasible $\Longleftrightarrow$ there exists a vector $y$
+		such that $y^{T} A \geq \mathbb{0}^{T}$ and $y^{T} b < 0$. This $y$ vector can
+		be found at the end of the Simplex Algorithm: If the ending basis is $B$, then
+		$y^{T} = c_{B}^{T} A_{B}^{-1}$. If the dual has a feasible solution, then that
+		solution can also be used as a certificate.
+	\end{definition}
 
-\begin{definition}[Certificate of Infeasibility (Farkas' Lemma)]\label{infeasibility}
-  Let $A$ be the constraint matrix of an LP in SEF. Then we have the LP is infeasible $\Longleftrightarrow$ there exists a vector $y$ such that $y^T A \geq \mathbb 0^T$ and $y^T b < 0$. This $y$ vector can be found at the end of the Simplex Algorithm: If the ending basis is $B$, then $y^T = c_B^T A_B^{-1}$. If the dual has a feasible solution, then that solution can also be used as a certificate.
-\end{definition}
+	\begin{definition}[Certificate of Unboundedness]
+		\label{unboundedness} A max LP is unbounded if and only if there exists a family
+		of solutions $x(t) = \bar x + td$ for some feasible solution $\bar x$ and vector
+		$d$ such that:
+		\begin{enumerate}
+			\item $d \geq 0$
 
-\begin{definition}[Certificate of Unboundedness]\label{unboundedness}
-  A max LP is unbounded if and only if there exists a family of solutions $x(t) = \bar x + td$ for some feasible solution $\bar x$ and vector $d$ such that:
-  \begin{enumerate}
-    \item $d \geq 0$
-    \item $Ad = \mathbb 0$.
-    \item $c^T d > 0$.
-  \end{enumerate}
+			\item $Ad = \mathbb{0}$.
 
-  More generally, the LP is unbounded if and only if there exists a family of solutions $x(t)$ such that $x(t)$ is feasible for all $t \geq 0$ and $c^Tx(t) \rightarrow \infty$ (or $-\infty$ if min) as $t \rightarrow \infty$.
-  
-  $\bar x$ and $d$ can be found during the Simplex Algorithm when the values in the pivot column are all non-positive. $\bar x$ is the solution to the LP before entering the variable and $d$ is the pivot column.
-\end{definition}
+			\item $c^{T} d > 0$.
+		\end{enumerate}
 
-\section{The Simplex Algorithm}
-For this section, we will assume the LP is in SEF: $\{\max c^T x : Ax = b, x \geq 0\}$. If we are given a starting basis or BFS, we can skip Phase I and proceed with Phase II. 
+		More generally, the LP is unbounded if and only if there exists a family of
+		solutions $x(t)$ such that $x(t)$ is feasible for all $t \geq 0$ and
+		$c^{T}x(t) \rightarrow \infty$ (or $-\infty$ if min) as
+		$t \rightarrow \infty$.
 
-\begin{definition}[Simplex: Phase I]\label{phase:i}
-  In Phase I, we add auxiliary variables and construct an auxiliary LP with the following form:
-  \begin{equation*}
-    \begin{aligned}
-      \min & (\mathbb 0, \mathbb 1) \m{x \\ a} \\
-      \text{subject to} & \m{A & I} \m{x \\ a} = b \\
-      & \m{x \\ a} \geq 0
-    \end{aligned}
-  \end{equation*}
-  where $I$ is the identity matrix and $a$ are the auxiliary variables. Then we solve the auxiliary problem using the
-  auxiliary variables as the starting basis. We can only proceed to Phase II if the optimal value at the end is zero. Otherwise, the original LP is infeasible.
-  \begin{note}
-    If the original LP contains a constraint $i$ where $b_i < 0$, then we must multiply that whole constraint by $-1$ before constructing the auxiliary LP.
-  \end{note}
-  \begin{tip}
-    During the first iteration of Phase I, we can quickly get the auxiliary LP into canonical form by subtracting all the constraints from the objective function. Can you see why?
-    \end{tip}
-\end{definition}
+		$\bar x$ and $d$ can be found during the Simplex Algorithm when the values
+		in the pivot column are all non-positive. $\bar x$ is the solution to the LP
+		before entering the variable and $d$ is the pivot column.
+	\end{definition}
 
-\begin{definition}[Simplex: Phase II]
-  In Phase II, we solve the original LP using the auxiliary variables as the starting basis. In each iteration, we enter the index left-most positive value of $c^T$ into the basis, and depart the index of $\min \frac {b_i} {A_{ji}}$ where $j$ is the index of the entering variable. After entering and departing a variable, we convert the LP into canonical form and repeat until we're done. The canonical form can be achieved by:
-  \begin{enumerate}
-    \item Finding $y^T = c_B^T A_B^{-1}$.
-    \item Replacing the objective function, $c^T x + z_1$, with $[c^T - y^T A]x + z_1 + y^T b$.
-    \item Multiplying the constraints by $A_B^{-1}$.
-  \end{enumerate}
-\end{definition}
+	\section{The Simplex Algorithm}
+	For this section, we will assume the LP is in SEF:
+	$\{\max c^{T} x : Ax = b, x \geq 0\}$. If we are given a starting basis or BFS,
+	we can skip Phase I and proceed with Phase II.
 
-\begin{theorem}[Bland's Rule]
-  If there are multiple entering variables, we choose the one with the smallest index. The simplex algorithm will always terminate if we use Bland's Rule. Note: this theorem was named Bland's rule because it's bland af.
-\end{theorem}
+	\begin{definition}[Simplex: Phase I]
+		\label{phase:i} In Phase I, we add auxiliary variables and construct an
+		auxiliary LP with the following form:
+		\begin{equation*}
+			\begin{aligned}
+				\min              & (\mathbb{0}, \mathbb{1}) \m{x \\ a} \\
+				\text{subject to} & \m{A & I} \m{x \\ a} = b            \\
+				                  & \m{x \\ a} \geq 0
+			\end{aligned}
+		\end{equation*}
+		where $I$ is the identity matrix and $a$ are the auxiliary variables. Then
+		we solve the auxiliary problem using the auxiliary variables as the starting
+		basis. We can only proceed to Phase II if the optimal value at the end is zero.
+		Otherwise, the original LP is infeasible.
+		\begin{note}
+			If the original LP contains a constraint $i$ where $b_{i} < 0$, then we
+			must multiply that whole constraint by $-1$ before constructing the
+			auxiliary LP.
+		\end{note}
+		\begin{tip}
+			During the first iteration of Phase I, we can quickly get the auxiliary LP
+			into canonical form by subtracting all the constraints from the objective
+			function. Can you see why?
+		\end{tip}
+	\end{definition}
 
-\begin{definition*}
-  \textbf{Degeneracy}
-\item \begin{definition}[Degenerate Iteration]\label{degeneracy:i}
-  A degenerate iteration is an iteration where the BFS does not change after the iteration.
-\end{definition}
+	\begin{definition}[Simplex: Phase II]
+		In Phase II, we solve the original LP using the auxiliary variables as the
+		starting basis. In each iteration, we enter the index left-most positive
+		value of $c^{T}$ into the basis, and depart the index of $\min \frac{b_{i}}{A_{ji}}$
+		where $j$ is the index of the entering variable. After entering and
+		departing a variable, we convert the LP into canonical form and repeat until
+		we're done. The canonical form can be achieved by:
+		\begin{enumerate}
+			\item Finding $y^{T} = c_{B}^{T} A_{B}^{-1}$.
 
-\item \begin{definition}[Degenerate Solution]\label{degeneracy:ii}
-  A degenerate solution is one where $x_i$ is zero for some $i \in B$.
-\end{definition}
+			\item Replacing the objective function, $c^{T} x + z_{1}$, with $[c^{T} - y
+				^{T} A]x + z_{1} + y^{T} b$.
 
-\end{definition*}
+			\item Multiplying the constraints by $A_{B}^{-1}$.
+		\end{enumerate}
+	\end{definition}
 
-\section{Geometry}
-\begin{definition}[Polyhedron]
-  A polyhedron is a set of points in $\mathbb R^n$ that can be described by a finite number of linear inequalities (i.e. an intersection of halfspaces). So every polyhedron can take the form of $P = \{Ax \leq b\}$
-\end{definition}
+	\begin{theorem}[Bland's Rule]
+		If there are multiple entering variables, we choose the one with the
+		smallest index. The simplex algorithm will always terminate if we use Bland's
+		Rule. Note: this theorem was named Bland's rule because it's bland af.
+	\end{theorem}
 
-\begin{remark}
-  The feasible region of an LP is a polyhedron.
-\end{remark}
+	\begin{definition*}
+		\textbf{Degeneracy} \item
+		\begin{definition}[Degenerate Iteration]
+			\label{degeneracy:i} A degenerate iteration is an iteration where the BFS does
+			not change after the iteration.
+		\end{definition}
 
-\chapter{Duality}
+		\item
+		\begin{definition}[Degenerate Solution]
+			\label{degeneracy:ii} A degenerate solution is one where $x_{i}$ is zero for
+			some $i \in B$.
+		\end{definition}
+	\end{definition*}
 
-\section{Obtaining the Dual}
-\begin{definition}[Dual of an LP]\label{dual}
-  Let $P$ be an LP with objective function $c^Tx$ and a constraint matrix $A$ with right-hand side $b$. Then we can use the table below to find the dual of $P$. The dual will have objective function $b^T y$, constraint matrix $A^T$, and right-hand side $c$.
-\end{definition}
+	\section{Geometry}
+	\begin{definition}[Polyhedron]
+		A polyhedron is a set of points in $\mathbb{R}^{n}$ that can be described by
+		a finite number of linear inequalities (i.e. an intersection of halfspaces).
+		So every polyhedron can take the form of $P = \{Ax \leq b\}$
+	\end{definition}
 
-\begin{note}
-  \begin{tabular}{cc}
-    \begin{minipage}{.5\linewidth}
-    \begin{tabular}{|c|c|c|}
-    \hline
-    \textbf{max} & & \textbf{min} \\
-    \hline
-    $\leq$ constraint & $\iff$ & $\geq 0$ variable \\
-    \hline  
-    $\geq$ constraint & $\iff$ & $\leq 0$ variable \\ 
-    \hline
-    $=$ constraint & $\iff$ & free variable \\
-    \hline
-    \hline
-    free variable & $\iff$ & $=$ constraint \\
-    \hline
-    $\geq 0$ variable & $\iff$ & $\geq$ constraint \\
-    \hline   
-    $\leq 0$ variable & $\iff$ & $\leq$ constraint \\
-    \hline
-  \end{tabular}
-\end{minipage} &
-\begin{minipage}{.5\linewidth}
-  Note that for a max LP, when we go from a constraint to a variable, the sign flips. When we go from a variable to a constraint, the sign does not flip. This can be a helpful way to memorize this.
-\end{minipage}%
-\end{tabular}
-\end{note}
+	\begin{remark}
+		The feasible region of an LP is a polyhedron.
+	\end{remark}
 
-\begin{remark}
-  The dual of the dual is the primal.
-\end{remark}
+	\chapter{Duality}
 
-\begin{eg}[Finding the Dual]\label{eg}
-Find the dual of: \\
-\begin{equation*}
-  \begin{aligned}
-    \min & \m{1 & 2 & 3}x \\
-    \text{subject to} & \\
-                      & \m{3 & 1 & 4
-                          \\ 1 & 5 & 9
-                          \\ 2 & 6 & 5}x \leq \m{10 \\ 24 \\ 16} \\
-                      & x_1 \geq 0, x_2 \leq 0, x_3 \text{ free}
-  \end{aligned}
-\end{equation*}
-\begin{answer}
-  Since we are starting with a min LP, we will look at the right side of the table. We can see that we have $\leq$ constraints, so we must have $\leq$ variables. Since we have $x_1 \geq 0$, $x_2 \leq 0$, and $x_3$ free, the constraints in the dual should be $\leq, \geq, =$ in  order. So we have:
-  \begin{equation*}
-  \begin{aligned}
-    \max & \m{10 & 24 & 16}y \\
-    \text{subject to} & \\
-                      & \m{3 & 1 & 2
-                          \\ 1 & 5 & 6
-                        \\ 4 & 9 & 5}y 
-                        \quad 
-                        \begin{matrix} \leq \\ \geq \\ = \end{matrix} 
-                        \m{1 \\ 2 \\ 3} \\
-                      & y \leq \mathbb 0
-  \end{aligned}
-\end{equation*}
-                        \end{answer}
-\end{eg}
+	\section{Obtaining the Dual}
+	\begin{definition}[Dual of an LP]
+		\label{dual} Let $P$ be an LP with objective function $c^{T}x$ and a constraint
+		matrix $A$ with right-hand side $b$. Then we can use the table below to find
+		the dual of $P$. The dual will have objective function $b^{T} y$, constraint
+		matrix $A^{T}$, and right-hand side $c$.
+	\end{definition}
 
-\section{Results of Duality}
-\begin{theorem}[Weak Duality Theorem]
-  Let (P) be $\{\max c^Tx : Ax = b, x\geq \mathbb 0\}$ and (D) be its dual $\{\min b^Ty : A^Ty \geq c\}$. If $x$ and $y$ are feasible solutions to (P) and (D) respectively, then $c^T x \leq b^T y$. Moreover, if $c^T x = b^T y$, then $x$ and $y$ are optimal for (P) and (D) respectively.
-\end{theorem}
-\begin{theorem}[Strong Duality Theorem]
-  Let (P) and (D) be as in the Weak Duality Theorem. If (P) has an optimal solution, then so does (D). Moreover, (P) and (D) will have the same optimal value
-\end{theorem}
-\begin{corollary}[Simple Results of Duality]
-  By the duality theorems above, we have:
-\begin{enumerate}
-  \item (P) is infeasible $\implies$ (D) is infeasible or unbounded.
-  \item (P) is unbounded $\implies$ (D) is infeasible.
-  \item (P) has an optimal solution $\implies$ (D) has an optimal solution.
-\end{enumerate}
-Reminder that the dual of the dual is the primal. For example, if we have (D) is infeasible, then (P) is infeasible or unbounded. 
-\end{corollary}
+	\begin{note}
+		\begin{tabular}{cc}
+			\begin{minipage}{.5\linewidth}\begin{tabular}{|c|c|c|}\hline \textbf{max} & & \textbf{min} \\ \hline $\leq$ constraint & $\iff$ & $\geq 0$ variable \\ \hline $\geq$ constraint & $\iff$ & $\leq 0$ variable \\ \hline $=$ constraint & $\iff$ & free variable \\ \hline \hline free variable & $\iff$ & $=$ constraint \\ \hline $\geq 0$ variable & $\iff$ & $\geq$ constraint \\ \hline $\leq 0$ variable & $\iff$ & $\leq$ constraint \\ \hline\end{tabular}\end{minipage} & \begin{minipage}{.5\linewidth}Note that for a max LP, when we go from a constraint to a variable, the sign flips. When we go from a variable to a constraint, the sign does not flip. This can be a helpful way to memorize this.\end{minipage} %
+		\end{tabular}
+	\end{note}
 
-\section{Proving Optimality with Duality}
-Recall from \hyperref[optimality:ii]{Optimality Certficate by Weak Duality}, that a feasible solution to the dual, $y$ can be used as a certificate of optimality for the primal. We can show this as follows:
-\begin{align*}
-  & Ax = b \\
-  \implies & \underbrace{y^TA}_{\geq^? c^T}x = y^T b \\
-\end{align*}
-Then we have $c^Tx \leq^? y^T b$. Therefore, $y^T b$ is an upper bound (or lower-bound for min, hence the ?) on the optimal value of the primal. If we have a feasible solution $\bar x$ with value $y^T b$, then we know it is optimal. 
+	\begin{remark}
+		The dual of the dual is the primal.
+	\end{remark}
 
-\section{Complementary Slackness (CS) Conditions}
-\begin{definition}[Complementary Slackness Conditions]
-  Let (P) and (D) be a primal and dual pair with feasible solutions $x$ and $y$. Then the CS Conditions are:
-  \begin{enumerate}
-    \item $x_i = 0$  or the corresponding constraint in (D) is tight.
-    \item $y_i = 0$ or the corresponding constraint in (P) is tight.
-  \end{enumerate}
-  As we saw in \hyperref[optimality:iii]{Optimality Certficate by CS Conditions}, if $x$ and $y$ are feasible solutions to (P) and (D) respectively, then $x$ and $y$ are optimal if and only if they satisfy all the CS conditions.
+	\begin{eg}
+		[Finding the Dual]\label{eg} Find the dual of: \\
+		\begin{equation*}
+			\begin{aligned}
+				\min              & \m{1 & 2 & 3}x                                                   \\
+				\text{subject to} &                                                                  \\
+				                  & \m{3 & 1 & 4 \\ 1 & 5 & 9 \\ 2 & 6 & 5}x \leq \m{10 \\ 24 \\ 16} \\
+				                  & x_{1} \geq 0, x_{2} \leq 0, x_{3} \text{ free}
+			\end{aligned}
+		\end{equation*}
+		\begin{answer}
+			Since we are starting with a min LP, we will look at the right side of the
+			table. We can see that we have $\leq$ constraints, so we must have $\leq$
+			variables. Since we have $x_{1} \geq 0$, $x_{2} \leq 0$, and $x_{3}$ free,
+			the constraints in the dual should be $\leq, \geq, =$ in order. So we have:
+			\begin{equation*}
+				\begin{aligned}
+					\max              & \m{10 & 24 & 16}y                                                                                          \\
+					\text{subject to} &                                                                                                            \\
+					                  & \m{3 & 1 & 2 \\ 1 & 5 & 6 \\ 4 & 9 & 5}y \quad \begin{matrix}\leq \\ \geq \\ =\end{matrix} \m{1 \\ 2 \\ 3} \\
+					                  & y \leq \mathbb{0}
+				\end{aligned}
+			\end{equation*}
+		\end{answer}
+	\end{eg}
 
-\end{definition}
+	\section{Results of Duality}
+	\begin{theorem}[Weak Duality Theorem]
+		Let (P) be $\{\max c^{T}x : Ax = b, x\geq \mathbb{0}\}$ and (D) be its dual $\{
+		\min b^{T} y : A^{T} y \geq c\}$. If $x$ and $y$ are feasible solutions to (P)
+		and (D) respectively, then $c^{T} x \leq b^{T} y$. Moreover, if $c^{T} x = b^{T}
+		y$, then $x$ and $y$ are optimal for (P) and (D) respectively.
+	\end{theorem}
+	\begin{theorem}[Strong Duality Theorem]
+		Let (P) and (D) be as in the Weak Duality Theorem. If (P) has an optimal
+		solution, then so does (D). Moreover, (P) and (D) will have the same optimal
+		value
+	\end{theorem}
+	\begin{corollary}[Simple Results of Duality]
+		By the duality theorems above, we have:
+		\begin{enumerate}
+			\item (P) is infeasible $\implies$ (D) is infeasible or unbounded.
 
-\section{Trust Me Bro Theorem}
-This theorem did not have a name in the course notes, so I made a name for it. It's pretty important so it should really have a name.
+			\item (P) is unbounded $\implies$ (D) is infeasible.
 
-\newpage
+			\item (P) has an optimal solution $\implies$ (D) has an optimal solution.
+		\end{enumerate}
+		Reminder that the dual of the dual is the primal. For example, if we have (D)
+		is infeasible, then (P) is infeasible or unbounded.
+	\end{corollary}
 
-\begin{theorem}[Trust Me Bro Theorem]
-  Let $\bar x$ be a feasible solution to $\{\max c^T x : Ax \leq b\}$. Then $\bar x$ is optimal if and only if $c$ is in the cone of tight constraints for $\bar x$. The generalization of this is the \hyperref[kkt]{KKT Theorem}
-\end{theorem}
-\begin{proof}
-    Trust me bro. 
-\end{proof}
-\begin{corollary}[Trust Me Bro Theorem Extended]
-  If the LP takes the form of $\{\max c^T x : Ax \text{ ? } b\}$, then $\bar x$ is an optimal solution if and only if $c = \lambda_1 g_1 + \dots + \lambda_k g_k$, where $g_i$ are all the tight constraints for $\bar x$ and 
-  \begin{enumerate}
-    \item $\lambda_i \geq 0$ for all $i = 1 \dots k$ if $Ax \leq b$.
-    \item $\lambda_i \leq 0$ for all $i = 1 \dots k$ if $Ax \geq b$.
-    \item $\lambda_i$ free for all $i = 1 \dots k$ if $Ax = b$.
-  \end{enumerate}
-\end{corollary}
-\begin{proof}
-  1. follows from the Trust Me Bro Theorem. \\[0.3in]
-  2. Suppose the LP is $\{\max c^T x : Ax \geq b\}$ with a feasible solution $\bar x$. Then the dual is \\ $\{\min b^T y : A^T y = c, y \leq \mathbb 0\}$.\\[0.15in]
-($\implies$) Suppose $\bar x$ is optimal. Without loss of generality, we can assume the first $n$ constraints are tight. Since $\bar x$ is optimal, then by CS Conditions, we know $y_{n+1} = \dots = y_k = 0$ since their corresponding constraint is not tight. Then from the dual, we have $c = A^T_1 y_1 + \dots + A^T_n y_n$, and $y \leq \mathbb 0$. Here $A^T_i$ are the tight constraints and $y_i$ is $\lambda_i$. That concludes the proof.\\[0.15in]
-  ($\impliedby$) Proof is trivial and thus omitted. But, trust me bro, it's true. \\[0.3in]
-  3. Follows a similar proof to 2.
-\end{proof}
+	\section{Proving Optimality with Duality}
+	Recall from \hyperref[optimality:ii]{Optimality Certficate by Weak Duality},
+	that a feasible solution to the dual, $y$ can be used as a certificate of optimality
+	for the primal. We can show this as follows:
+	\begin{align*}
+		         & Ax = b                                    \\
+		\implies & \underbrace{y^TA}_{\geq^? c^T}x = y^{T} b \\
+	\end{align*}
+	Then we have $c^{T}x \leq^{?} y^{T} b$. Therefore, $y^{T} b$ is an upper bound
+	(or lower-bound for min, hence the ?) on the optimal value of the primal. If we
+	have a feasible solution $\bar x$ with value $y^{T} b$, then we know it is
+	optimal.
 
-\chapter{Integer Programming}
-\section{Shortest Path algorithm}
-\subsection{The Problem}
-\begin{definition}[Shortest Path Problem]
-  Let $G = (V, E)$ be a directed graph with $n$ vertices and $m$ edges. Let $c : E \rightarrow \mathbb R$ be a cost function. The shortest path problem is to find a path from $s \in V$ to $t \in V$ with the minimum cost. Without loss of generality, we can assume the objective function $c^T x$ (i.e. it is linear).
+	\section{Complementary Slackness (CS) Conditions}
+	\begin{definition}[Complementary Slackness Conditions]
+		Let (P) and (D) be a primal and dual pair with feasible solutions $x$ and $y$.
+		Then the CS Conditions are:
+		\begin{enumerate}
+			\item $x_{i} = 0$ or the corresponding constraint in (D) is tight.
 
-  \begin{corollary}[Result of Menger's Theorem]
-    If $P$ is an s,t path and $\delta(S)$ is any s,t cut, then $P$ must have at least one edge in $\delta(S)$. This is a result of a  variation of Menger's Theorem not shown here. 
-    \end{corollary}
+			\item $y_{i} = 0$ or the corresponding constraint in (P) is tight.
+		\end{enumerate}
+		As we saw in \hyperref[optimality:iii]{Optimality Certficate by CS
+		Conditions}, if $x$ and $y$ are feasible solutions to (P) and (D)
+		respectively, then $x$ and $y$ are optimal if and only if they satisfy all the
+		CS conditions.
+	\end{definition}
 
-\end{definition}
-We can formulate the problem as an integer program as follows:
-\begin{align*}
-  & \min c^T x \\
-  \text{s.t. } & \sum (x_e : e \in \delta) \geq 1 \text{ for all s,t cuts } \delta \\
-               & x_e \in \mathbb N_{0}, \text{ for all } e \in E \\
-\end{align*}
+	\section{Trust Me Bro Theorem}
+	This theorem did not have a name in the course notes, so I made a name for it.
+	It's pretty important so it should really have a name.
 
-\subsection{The Algorithm}
-\begin{algorithm}
-  \floatname{algorithm}{Algorithm}
-  \algrenewcommand\algorithmicrequire{\textbf{Input: }}
-  \algrenewcommand\algorithmicensure{\textbf{Output: }}
-    \caption{Shortest Path Algorithm}
-  \label{alg:path}
-  \begin{algorithmic}[1]
-    \Require $G = (V, E)$, the costs: $c \in \mathbb R^m$, and the source $s$ and sink $t$.
-    \Ensure an s,t path with minimum cost and the vector of width assignments $y$.
-    \State Set $y := \mathbb 0, U := \{s\}, T := \{\}$
-    \While{$t \notin U$} 
-      \State Calculate slack$(uv)$ for all $uv \in \delta(U)$ 
-      \State Find the edge $uv$ with minimum slack \\ \Comment{If there are multiple edges with the same slack, choose one arbitrarily}
-      \State Set $y_U := \text{slack}(uv)$
-      \State Set $U := U \cup \{v\}$, and $T := T \cup \{uv\}$ 
-    \EndWhile \Comment{At the end of this loop, we have a shortest s,t path in $T$}
-    \State \textbf{output} an s,t path in $T$, and the vector of width assignments $y$.
-  \end{algorithmic}
-\end{algorithm}
+	\newpage
 
-\newpage
+	\begin{theorem}[Trust Me Bro Theorem]
+		Let $\bar x$ be a feasible solution to $\{\max c^{T} x : Ax \leq b\}$. Then
+		$\bar x$ is optimal if and only if $c$ is in the cone of tight constraints
+		for $\bar x$. The generalization of this is the \hyperref[kkt]{KKT Theorem}
+	\end{theorem}
+	\begin{proof}
+		Trust me bro.
+	\end{proof}
+	\begin{corollary}[Trust Me Bro Theorem Extended]
+		If the LP takes the form of $\{\max c^{T} x : Ax \text{ ? }b\}$, then
+		$\bar x$ is an optimal solution if and only if
+		$c = \lambda_{1} g_{1} + \dots + \lambda_{k} g_{k}$, where $g_{i}$ are all the
+		tight constraints for $\bar x$ and
+		\begin{enumerate}
+			\item $\lambda_{i} \geq 0$ for all $i = 1 \dots k$ if $Ax \leq b$.
 
-\section{Solving Integer Programs}
-\subsection{Properties of Integer Programs}
-\begin{definition}[Convex Hull]
-  Let $S \subseteq \mathbb R^n$ be a set of points. The convex hull of $S$ is the smallest convex set containing $S$.
-  \begin{corollary}
-    Each set $S$ has a unique convex hull.
-  \end{corollary}
-\end{definition}
+			\item $\lambda_{i} \leq 0$ for all $i = 1 \dots k$ if $Ax \geq b$.
 
-\begin{theorem}[Meyer's Theorem]
-  Let $P = \{Ax \leq b\}$, where $A$ and $b$ are rational. Then the convex hull of integer points in $P$ is polyhedron.
-\end{theorem}
+			\item $\lambda_{i}$ free for all $i = 1 \dots k$ if $Ax = b$.
+		\end{enumerate}
+	\end{corollary}
+	\begin{proof}
+		1. follows from the Trust Me Bro Theorem. \\[0.3in] 2. Suppose the LP is
+		$\{\max c^{T} x : Ax \geq b\}$ with a feasible solution $\bar x$. Then the dual
+		is \\ $\{\min b^{T} y : A^{T} y = c, y \leq \mathbb{0}\}$.\\[0.15in] ($\implies$)
+		Suppose $\bar x$ is optimal. Without loss of generality, we can assume the first
+		$n$ constraints are tight. Since $\bar x$ is optimal, then by CS Conditions,
+		we know $y_{n+1}= \dots = y_{k} = 0$ since their corresponding constraint is
+		not tight. Then from the dual, we have
+		$c = A^{T}_{1} y_{1} + \dots + A^{T}_{n} y_{n}$, and $y \leq \mathbb{0}$.
+		Here $A^{T}_{i}$ are the tight constraints and $y_{i}$ is $\lambda_{i}$. That
+		concludes the proof.\\[0.15in] ($\impliedby$) Proof is trivial and thus omitted.
+		But, trust me bro, it's true. \\[0.3in] 3. Follows a similar proof to 2.
+	\end{proof}
 
-\begin{theorem}[IP and LP Results]
-  Let (IP) be $\{\max c^Tx : Ax \leq b, x \in \mathbb Z\}$, where $A, b$ are rational. Let the convex hull of feasible solutions be the polyhedron $P =\{x : A' x \leq b'\}$. Also let (LP) be $\{\max c^T x : x \in P\}$. Then we have the following results:
-  \begin{enumerate}
-    \item (IP) is infeasible $\iff$ (LP) is infeasible.
-    \item (IP) is unbounded $\iff$ (LP) is unbounded.
-    \item an optimal solution to (IP) is an optimal solution to (LP).
-    \item an extreme optimal solution of (LP) is an optimal solution of (IP).
-  \end{enumerate}
-  \begin{proof}
-    No.
-  \end{proof}
-\end{theorem}
+	\chapter{Integer Programming}
+	\section{Shortest Path algorithm}
+	\subsection{The Problem}
+	\begin{definition}[Shortest Path Problem]
+		Let $G = (V, E)$ be a directed graph with $n$ vertices and $m$ edges. Let
+		$c : E \rightarrow \mathbb{R}$ be a cost function. The shortest path problem
+		is to find a path from $s \in V$ to $t \in V$ with the minimum cost. Without
+		loss of generality, we can assume the objective function $c^{T} x$ (i.e. it is
+		linear).
 
-\subsection{Cutting Planes}
+		\begin{corollary}[Result of Menger's Theorem]
+			If $P$ is an s,t path and $\delta(S)$ is any s,t cut, then $P$ must have
+			at least one edge in $\delta(S)$. This is a result of a variation of Menger's
+			Theorem not shown here.
+		\end{corollary}
+	\end{definition}
+	We can formulate the problem as an integer program as follows:
+	\begin{align*}
+		             & \min c^{T} x                                                       \\
+		\text{s.t. } & \sum (x_{e} : e \in \delta) \geq 1 \text{ for all s,t cuts }\delta \\
+		             & x_{e} \in \mathbb{N}_{0}, \text{ for all }e \in E                  \\
+	\end{align*}
 
-\begin{definition}[Cutting Planes]
-  We denote $\floor{ax = b}$ as $\floor{a}x = \floor{b}$. Let $\bar x$ be the optimal solution for the relaxed IP. \\
-  For any constraint $ax = b$, if $\bar x$ does not satisfy $\floor{ax \leq b}$, then $\floor{ax \leq b}$ is a cutting plane. It can be written as $\floor{a}x + s = \floor{b}$, where $s$ is a slack variable, and added to the IP.
-\end{definition}
+	\subsection{The Algorithm}
+	\begin{algorithm}
+		\floatname{algorithm}{Algorithm} \algrenewcommand\algorithmicrequire{\textbf{Input: }}
+		\algrenewcommand\algorithmicensure{\textbf{Output: }}
+		\caption{Shortest Path Algorithm}
+		\label{alg:path}
+		\begin{algorithmic}
+			[1] \Require $G = (V, E)$, the costs: $c \in \mathbb{R}^{m}$, and the
+			source $s$ and sink $t$. \Ensure an s,t path with minimum cost and the vector
+			of width assignments $y$. \State Set
+			$y := \mathbb{0}, U := \{s\}, T := \{\}$ \While{$t \notin U$} \State Calculate
+			slack$(uv)$ for all $uv \in \delta(U)$ \State Find the edge $uv$ with
+			minimum slack \\ \Comment{If there are multiple edges with the same slack, choose one arbitrarily}
+			\State Set $y_{U} := \text{slack}(uv)$ \State Set $U := U \cup \{v\}$, and
+			$T := T \cup \{uv\}$ \EndWhile \Comment{At the end of this loop, we have a shortest s,t path in $T$}
+			\State \textbf{output} an s,t path in $T$, and the vector of width assignments
+			$y$.
+		\end{algorithmic}
+	\end{algorithm}
 
-\subsection{Solving IPs with Relaxations}
-We can use relaxations and cutting planes to solve integer programs. The idea is to relax the integer program by removing the integrality constraint. Then solving the new linear program. If the optimal solution is an integer, then we stop. Otherwise, we add a cutting plane and solve again. We repeat until we find an integer solution. This is a really bad way of solving IPs, but oh well.
+	\newpage
 
-\begin{algorithm}
-  \floatname{algorithm}{Algorithm}
-  \algrenewcommand\algorithmicrequire{\textbf{Input: } An IP: }
-  \algrenewcommand\algorithmicensure{\textbf{Output: } An optimal solution to the IP: }
-  \caption{Cutting Planes Algorithm}
-  \label{alg:cut}
-  \begin{algorithmic}[1]
-    \Require $\{\max c^Tx : Ax = b, x \in \mathbb Z\}$
-    \Ensure $\bar x$
-    \State Solve the LP relaxation of the IP. Let $\bar x$ be the optimal solution.
-    \While{$\bar x$ is not integer}
-      \State Find a cutting plane $s$ for the IP.
-      \State Add $s$ to the IP.
-      \State Solve the LP relaxation of the IP. Let $\bar x$ be the optimal solution.
-    \EndWhile
-    \State \textbf{return} $\bar x$
-  \end{algorithmic}
-\end{algorithm}
+	\section{Solving Integer Programs}
+	\subsection{Properties of Integer Programs}
+	\begin{definition}[Convex Hull]
+		Let $S \subseteq \mathbb{R}^{n}$ be a set of points. The convex hull of $S$
+		is the smallest convex set containing $S$.
+		\begin{corollary}
+			Each set $S$ has a unique convex hull.
+		\end{corollary}
+	\end{definition}
 
+	\begin{theorem}[Meyer's Theorem]
+		Let $P = \{Ax \leq b\}$, where $A$ and $b$ are rational. Then the convex hull
+		of integer points in $P$ is polyhedron.
+	\end{theorem}
 
-\chapter{Nonlinear Programming}
-\section{Gradients and Subgradients}
-\begin{definition}[Subgradient]\label{subgradient}
-  Let $f : \mathbb R^n \rightarrow \mathbb R$ be a convex function. We say $s$ is a subgradient of $f$ at $\bar x$ if $h(x) \leq f(x)$ for all $x \in \mathbb R^n$, where $h(x) := f(\bar x) + s^T (x - \bar x)$
-\end{definition}
-\begin{definition}[Gradient]
-  Let $f : \mathbb R^n \rightarrow \mathbb R$ be a convex function differentiable with respect to $\bar x_i$ for all $i = 1, \dots, n$. We say $\nabla f(\bar x) = \begin{bmatrix}\partial_{x_1}f, \dots, \partial_{x_n} f\end{bmatrix}$ is a gradient of $f$ at $\bar x$.
-\end{definition}
+	\begin{theorem}[IP and LP Results]
+		Let (IP) be $\{\max c^{T}x : Ax \leq b, x \in \mathbb{Z}\}$, where $A, b$
+		are rational. Let the convex hull of feasible solutions be the polyhedron $P
+		=\{x : A' x \leq b'\}$. Also let (LP) be $\{\max c^{T} x : x \in P\}$. Then we
+		have the following results:
+		\begin{enumerate}
+			\item (IP) is infeasible $\iff$ (LP) is infeasible.
 
-\begin{proposition}[Properties of Gradients and Subgradients]\label{prop}
-. \\
-  \begin{itemize}
-    \item A subgradient at $\bar x$ is unique if and only if $f$ is differentiable at $\bar x$.
-    \item A subgradient will always exist for a convex function with only bounded operators. 
-    \item Any gradient is also a subgradient, but the converse is not true.
-  \end{itemize}
-\end{proposition}
+			\item (IP) is unbounded $\iff$ (LP) is unbounded.
 
-\section{NLP Relaxations}
-\begin{definition}[Supporting Halfspace]\label{supporting}
-  Let $C = \{x : f(x) \leq 0\}$ and $\bar x = 0$. Then the supporting halfspace of $C$ is
-  $F = \{x: h(x) \leq 0 \}$, where $h(x)$ is the same from \hyperref[subgradient]{Subgradient}.
-\end{definition}
-\begin{proposition}[Supporting Halfspace of a Convex Set]
-  Let $C, F$ be as defined above. $C \subseteq F$. 
-\end{proposition}
-\begin{proof}
-  Let $x \in C$. Then $f(x) \leq 0$. Then $h(x) \leq 0$ since $h(x) \leq f(x)$ for all $x \in \mathbb R^n$. Therefore, $x \in F$.
-\end{proof}
+			\item an optimal solution to (IP) is an optimal solution to (LP).
 
-\begin{corollary}[NLP Relaxation]\label{nlp}
-  Let (NLP) be an NLP in the form \\$\{\min c^Tx : g_i(x) \leq 0, i = 1, \dots, m\}$. If $g_i(x)$ has a subgradient $s$ at $\bar x$, then the NLP obtained by replacing $g_i(x) \leq 0$ with $g_i(\bar x) + s^T(x - \bar x)\leq 0$ is a relaxation of (NLP).
-\end{corollary}
+			\item an extreme optimal solution of (LP) is an optimal solution of (IP).
+		\end{enumerate}
+		\begin{proof}
+			No.
+		\end{proof}
+	\end{theorem}
 
-\newpage
+	\subsection{Cutting Planes}
 
-\section{KKT Conditions}
-The KKT approach is a generalization of Lagrange Multipliers, which only allow for equality constraints. KKT allows for both equality and inequality constraints.
-\begin{note}
-  We assume that the objective function and all constraints are differentiable at the optimal point.
-\end{note}
-\begin{definition*}
-  \textbf{KKT Conditions} \\
-\item Note that the definitions that follow are all equivalent, although some only apply to NLPs without equality constraints.
-\item \begin{definition}[KKT Conditions for a General NLP]\label{kkt}
-  Given a general NLP in the form of: \\ $\{\min f(x) : g_i(x) \leq 0, h_j(x) = 0, i = 1, \dots, m, j = 1, \dots, n\}$, 
-  The KKT conditions are split into 4 parts:
-  \begin{enumerate}
-    \item Stationarity: $0 \in \partial f(x) + \sum_{i=1}^m \lambda_i \partial g_i(x) + \sum_{i=1}^n \mu_i \partial h_i(x)$
-    \item Primal Feasibility: $g_i(x) \leq 0$ and $h_j(x) = 0$ for all $i,j$
-    \item Dual Feasibility: $\lambda_i \geq 0, i = 1, \dots, m$.
-    \item Complementary Slackness: $\lambda_i g_i(x) = 0, i = 1, \dots, m$
-  \end{enumerate}
+	\begin{definition}[Cutting Planes]
+		We denote $\floor{ax = b}$ as $\floor{a}x = \floor{b}$. Let $\bar x$ be the
+		optimal solution for the relaxed IP. \\ For any constraint $ax = b$, if
+		$\bar x$ does not satisfy $\floor{ax \leq b}$, then $\floor{ax \leq b}$ is a
+		cutting plane. It can be written as $\floor{a}x + s = \floor{b}$, where $s$ is
+		a slack variable, and added to the IP.
+	\end{definition}
 
-  Note that $\lambda_i$ and $\mu_i$ are the Lagrange Multipliers for the $i$th constraint.
-\end{definition}
+	\subsection{Solving IPs with Relaxations}
+	We can use relaxations and cutting planes to solve integer programs. The idea
+	is to relax the integer program by removing the integrality constraint. Then solving
+	the new linear program. If the optimal solution is an integer, then we stop.
+	Otherwise, we add a cutting plane and solve again. We repeat until we find an
+	integer solution. This is a really bad way of solving IPs, but oh well.
 
-%   Note that the Dual Feasibility and Stationarity conditions can be combined into one condition if a Slater Point exists: $-\nabla f(x) \in \text{cone}\left\{ g_i(x), h_j(x) : i \in T, j = 1, \dots, n \right\}$, where T is the index set of tight constraints at $x$.
+	\begin{algorithm}
+		\floatname{algorithm}{Algorithm} \algrenewcommand\algorithmicrequire{\textbf{Input: } An IP: }
+		\algrenewcommand\algorithmicensure{\textbf{Output: } An optimal solution to the IP: }
+		\caption{Cutting Planes Algorithm}
+		\label{alg:cut}
+		\begin{algorithmic}
+			[1] \Require $\{\max c^{T}x : Ax = b, x \in \mathbb{Z}\}$ \Ensure $\bar x$
+			\State Solve the LP relaxation of the IP. Let $\bar x$ be the optimal
+			solution. \While{$\bar x$ is not integer} \State Find a cutting plane $s$
+			for the IP. \State Add $s$ to the IP. \State Solve the LP relaxation of
+			the IP. Let $\bar x$ be the optimal solution. \EndWhile \State \textbf{return}
+			$\bar x$
+		\end{algorithmic}
+	\end{algorithm}
 
+	\chapter{Nonlinear Programming}
+	\section{Gradients and Subgradients}
+	\begin{definition}[Subgradient]
+		\label{subgradient} Let $f : \mathbb{R}^{n} \rightarrow \mathbb{R}$ be a convex
+		function. We say $s$ is a subgradient of $f$ at $\bar x$ if $h(x) \leq f(x)$
+		for all $x \in \mathbb{R}^{n}$, where $h(x) := f(\bar x) + s^{T} (x - \bar x)$
+	\end{definition}
+	\begin{definition}[Gradient]
+		Let $f : \mathbb{R}^{n} \rightarrow \mathbb{R}$ be a convex function differentiable
+		with respect to $\bar x_{i}$ for all $i = 1, \dots, n$. We say
+		$\nabla f(\bar x) =
+		\begin{bmatrix}
+			\partial_{x_1}f, \dots, \partial_{x_n}f
+		\end{bmatrix}$ is a gradient of $f$ at $\bar x$.
+	\end{definition}
 
-\item \begin{definition}[KKT Conditions for a General NLP II]\label{kkt2}
-We can rewrite the KKT conditions to make them a bit more palatable. Let $\bar x$ be a solution to the NLP. Also assume that the NLP has a Slater Point. Then the ``only" KKT condition is:
-\begin{center}
-  $-\nabla f(x) \in \text{cone}\left\{ \nabla g_i(x), \nabla h_j(x) : i \in T, j = 1, \dots, n \right\}$,
-\end{center}
-where T is the index set of tight constraints at $\bar x$.
-\end{definition}
+	\begin{proposition}[Properties of Gradients and Subgradients]
+		\label{prop} . \\
+		\begin{itemize}
+			\item A subgradient at $\bar x$ is unique if and only if $f$ is differentiable
+				at $\bar x$.
 
+			\item A subgradient will always exist for a convex function with only bounded
+				operators.
 
-\item \begin{definition}[KKT Conditions for an NLP without Equality Constraints]\label{kkt3}
-  Given an NLP in the form of: \\ $\{\min f(x) : g_i(x) \leq 0, i = 1, \dots, m\}$, 
-  The KKT conditions are split into 4 parts:
-  \begin{enumerate}
-    \item Stationarity: $0 \in \partial f(x) + \sum_{i=1}^m \lambda_i \partial g_i(x)$
-    \item Primal Feasibility: $g_i(x) \leq 0$ for all $i$
-    \item Dual Feasibility: $\lambda_i \geq 0, i = 1, \dots, m$.
-    \item Complementary Slackness: $\lambda_i g_i(x) = 0, i = 1, \dots, m$
-  \end{enumerate}
-\end{definition}
+			\item Any gradient is also a subgradient, but the converse is not true.
+		\end{itemize}
+	\end{proposition}
 
-\item \begin{definition}[KKT Conditions for an NLP without Equality Constraints II]\label{kkt4}
-  Let $\bar x$ be a solution to the NLP. Also assume that the NLP has a Slater Point. Then the ``only" KKT condition is:
-\begin{center}
-  $-\nabla f(x) \in \text{cone}\left\{ \nabla g_i(x): i \in T \right\}$, 
-\end{center}
-where T is the index set of tight constraints at $\bar x$.
-\end{definition}
-\end{definition*}
+	\section{NLP Relaxations}
+	\begin{definition}[Supporting Halfspace]
+		\label{supporting} Let $C = \{x : f(x) \leq 0\}$ and $\bar x = 0$. Then the
+		supporting halfspace of $C$ is $F = \{x: h(x) \leq 0 \}$, where $h(x)$ is the
+		same from \hyperref[subgradient]{Subgradient}.
+	\end{definition}
+	\begin{proposition}[Supporting Halfspace of a Convex Set]
+		Let $C, F$ be as defined above. $C \subseteq F$.
+	\end{proposition}
+	\begin{proof}
+		Let $x \in C$. Then $f(x) \leq 0$. Then $h(x) \leq 0$ since $h(x) \leq f(x)$
+		for all $x \in \mathbb{R}^{n}$. Therefore, $x \in F$.
+	\end{proof}
 
-\begin{theorem}[KKT Theorem]
-  Let $x^*$ be a solution to an NLP. Then $x^*$ is optimal if and only if the KKT conditions hold.
-\end{theorem}
+	\begin{corollary}[NLP Relaxation]
+		\label{nlp} Let (NLP) be an NLP in the form \\$\{\min c^{T}x : g_{i}(x) \leq
+		0, i = 1, \dots, m\}$. If $g_{i}(x)$ has a subgradient $s$ at $\bar x$, then
+		the NLP obtained by replacing $g_{i}(x) \leq 0$ with
+		$g_{i}(\bar x) + s^{T}(x - \bar x)\leq 0$ is a relaxation of (NLP).
+	\end{corollary}
 
+	\newpage
 
+	\section{KKT Conditions}
+	The KKT approach is a generalization of Lagrange Multipliers, which only allow
+	for equality constraints. KKT allows for both equality and inequality constraints.
+	\begin{note}
+		We assume that the objective function and all constraints are differentiable
+		at the optimal point.
+	\end{note}
+	\begin{definition*}
+		\textbf{KKT Conditions} \\ \item Note that the definitions that follow are
+		all equivalent, although some only apply to NLPs without equality constraints.
+		\item
+		\begin{definition}[KKT Conditions for a General NLP]
+			\label{kkt} Given a general NLP in the form of: \\
+			$\{\min f(x) : g_{i}(x) \leq 0, h_{j}(x) = 0, i = 1, \dots, m, j = 1, \dots
+			, n\}$, The KKT conditions are split into 4 parts:
+			\begin{enumerate}
+				\item Stationarity:
+					$0 \in \partial f(x) + \sum_{i=1}^{m} \lambda_{i} \partial g_{i}(x) + \sum
+					_{i=1}^{n} \mu_{i} \partial h_{i}(x)$
+
+				\item Primal Feasibility: $g_{i}(x) \leq 0$ and $h_{j}(x) = 0$ for all
+					$i,j$
+
+				\item Dual Feasibility: $\lambda_{i} \geq 0, i = 1, \dots, m$.
+
+				\item Complementary Slackness:
+					$\lambda_{i} g_{i}(x) = 0, i = 1, \dots, m$
+			\end{enumerate}
+
+			Note that $\lambda_{i}$ and $\mu_{i}$ are the Lagrange Multipliers for the
+			$i$th constraint.
+		\end{definition}
+
+		%   Note that the Dual Feasibility and Stationarity conditions can be combined into one condition if a Slater Point exists: $-\nabla f(x) \in \text{cone}\left\{ g_i(x), h_j(x) : i \in T, j = 1, \dots, n \right\}$, where T is the index set of tight constraints at $x$.
+
+		\item
+		\begin{definition}[KKT Conditions for a General NLP II]
+			\label{kkt2} We can rewrite the KKT conditions to make them a bit more palatable.
+			Let $\bar x$ be a solution to the NLP. Also assume that the NLP has a Slater
+			Point. Then the ``only" KKT condition is:
+			\begin{center}
+				$-\nabla f(x) \in \text{cone}\left\{ \nabla g_{i}(x), \nabla h_{j}(x) : i
+				\in T, j = 1, \dots, n \right\}$,
+			\end{center}
+			where T is the index set of tight constraints at $\bar x$.
+		\end{definition}
+
+		\item
+		\begin{definition}[KKT Conditions for an NLP without Equality Constraints]
+			\label{kkt3} Given an NLP in the form of: \\
+			$\{\min f(x) : g_{i}(x) \leq 0, i = 1, \dots, m\}$, The KKT conditions are
+			split into 4 parts:
+			\begin{enumerate}
+				\item Stationarity:
+					$0 \in \partial f(x) + \sum_{i=1}^{m} \lambda_{i} \partial g_{i}(x)$
+
+				\item Primal Feasibility: $g_{i}(x) \leq 0$ for all $i$
+
+				\item Dual Feasibility: $\lambda_{i} \geq 0, i = 1, \dots, m$.
+
+				\item Complementary Slackness:
+					$\lambda_{i} g_{i}(x) = 0, i = 1, \dots, m$
+			\end{enumerate}
+		\end{definition}
+
+		\item
+		\begin{definition}[KKT Conditions for an NLP without Equality Constraints II]
+			\label{kkt4} Let $\bar x$ be a solution to the NLP. Also assume that the
+			NLP has a Slater Point. Then the ``only" KKT condition is:
+			\begin{center}
+				$-\nabla f(x) \in \text{cone}\left\{ \nabla g_{i}(x): i \in T \right\}$,
+			\end{center}
+			where T is the index set of tight constraints at $\bar x$.
+		\end{definition}
+	\end{definition*}
+
+	\begin{theorem}[KKT Theorem]
+		Let $x^{*}$ be a solution to an NLP. Then $x^{*}$ is optimal if and only if
+		the KKT conditions hold.
+	\end{theorem}
 \end{document}
